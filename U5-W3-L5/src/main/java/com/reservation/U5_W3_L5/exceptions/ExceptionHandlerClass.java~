@@ -27,22 +27,4 @@ public class ExceptionHandlerClass {
         error.setStatus("409");
         return new ResponseEntity<>(error, HttpStatus.CONFLICT);
     }
-
-    @ExceptionHandler(value = SecurityException.class)
-    protected ResponseEntity<Error> securityException(SecurityException ex) {
-        Error error = new Error();
-        error.setMessage("Security exception");
-        error.setDetails(ex.getMessage());
-        error.setStatus("403");
-        return new ResponseEntity<>(error, HttpStatus.FORBIDDEN);
-    }
-
-    @ExceptionHandler(value = IllegalStateException.class)
-    protected ResponseEntity<Error> illegalStateException(IllegalStateException ex) {
-        Error error = new Error();
-        error.setMessage("Illegal state exception");
-        error.setDetails(ex.getMessage());
-        error.setStatus("400");
-        return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
-    }
 }

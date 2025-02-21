@@ -67,7 +67,8 @@ public class EventService {
             throw new SecurityException("You are not the organizer of this event");
         }
         event.setOrganizer(appUserRepository.findById(getCurrentUserId()).get());
-        event.setParticipants(eventRepository.findById(id).get().getParticipants());
+        event.setParticipants(event.getParticipants().stream()
+                .map(participant -> appUserRepository.findById(participant.getId()).get()).toList());
         event.setId(id);
         return eventResponseFromEvent(eventRepository.save(event));
     }

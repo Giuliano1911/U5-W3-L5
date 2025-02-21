@@ -8,5 +8,7 @@ public interface EventRepository extends JpaRepository<Event, Long> {
 
     boolean existsByTitle(String title);
 
+    List<Event> findAllByUserId(Long userId);
+
     List<Event> findAllByOrganizerId(Long organizerId);
 }

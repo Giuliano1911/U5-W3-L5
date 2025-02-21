@@ -47,7 +47,7 @@ public class AppUserService {
     }
 
     public AppUser findById(Long id) {
-        return appUserRepository.findById(Long .valueOf(id)).orElseThrow(() -> new EntityNotFoundException("Utente non trovato con id: " + id));
+        return appUserRepository.findById(id);
     }
 
     public String authenticateUser(String username, String password) {

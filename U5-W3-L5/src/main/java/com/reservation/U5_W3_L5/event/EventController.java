@@ -5,6 +5,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -13,6 +14,7 @@ import java.util.List;
 @RequestMapping("/api/events")
 @RequiredArgsConstructor
 @PreAuthorize("isAuthenticated()")
+@Validated
 public class EventController {
     private final EventService eventService;
 
@@ -28,18 +30,32 @@ public class EventController {
         return eventService.findById(id);
     }
 
+    @GetMapping("/reservations")
+    @ResponseStatus(HttpStatus.OK)
+    @PreAuthorize("hasRole('USER')")
+    public List<EventResponse> getCurrentUserEvents() {
+        return eventService.findAllEventsByUserId();
+    }
+
+    @GetMapping("/created")
+    @ResponseStatus(HttpStatus.OK)
+    @PreAuthorize("hasRole('ORGANIZER')")
+    public List<EventResponse> findAllEventsByOrganizer() {
+        return eventService.findAllEventsByOrganizer();
+    }
+
     @PatchMapping("/add/{id}")
     @ResponseStatus(HttpStatus.OK)
     @PreAuthorize("hasRole('USER')")
-    public EventResponse addParticipant(@PathVariable Long eventId) {
-        return eventService.addParticipant(eventId);
+    public EventResponse addParticipant(@PathVariable Long id) {
+        return eventService.addParticipant(id);
     }
 
     @PatchMapping("/remove/{id}")
     @ResponseStatus(HttpStatus.OK)
     @PreAuthorize("hasRole('USER')")
-    public EventResponse removeParticipant(@PathVariable Long eventId) {
-        return eventService.removeParticipant(eventId);
+    public EventResponse removeParticipant(@PathVariable Long id) {
+        return eventService.removeParticipant(id);
     }
 
     @PostMapping

@@ -25,5 +25,5 @@ public class EventRequest {
     private LocalDate date;
 
     @NotNull(message = "Max Guests is required")
-    private int maxGuests;
+    private Integer maxGuests;
 }
