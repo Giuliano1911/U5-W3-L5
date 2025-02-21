@@ -1,0 +1,4 @@
+package com.reservation.U5_W3_L5.response;
+
+public class CreateResponse {
+}
