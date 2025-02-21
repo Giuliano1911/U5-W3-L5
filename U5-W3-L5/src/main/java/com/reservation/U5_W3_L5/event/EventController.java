@@ -28,11 +28,18 @@ public class EventController {
         return eventService.findById(id);
     }
 
-    @PatchMapping("/{id}")
+    @PatchMapping("/add/{id}")
     @ResponseStatus(HttpStatus.OK)
     @PreAuthorize("hasRole('USER')")
     public EventResponse addParticipant(@PathVariable Long eventId) {
         return eventService.addParticipant(eventId);
+    }
+
+    @PatchMapping("/remove/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    @PreAuthorize("hasRole('USER')")
+    public EventResponse removeParticipant(@PathVariable Long eventId) {
+        return eventService.removeParticipant(eventId);
     }
 
     @PostMapping

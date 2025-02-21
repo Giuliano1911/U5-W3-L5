@@ -95,4 +95,13 @@ public class EventService {
         event.getParticipants().add(appUserRepository.findById(getCurrentUserId()).get());
         return eventResponseFromEvent(eventRepository.save(event));
     }
+
+    public EventResponse removeParticipant(Long eventId) {
+        Event event = eventRepository.findById(eventId).orElseThrow(() -> new EntityNotFoundException("Event not found"));
+        if (!event.getParticipants().contains(appUserRepository.findById(getCurrentUserId()).get())) {
+            throw new EntityNotFoundException("You are not a participant of this event");
+        }
+        event.getParticipants().remove(appUserRepository.findById(getCurrentUserId()).get());
+        return eventResponseFromEvent(eventRepository.save(event));
+    }
 }
