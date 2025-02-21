@@ -83,4 +83,16 @@ public class EventService {
         }
         eventRepository.deleteById(id);
     }
+
+    public EventResponse addParticipant(Long eventId) {
+        Event event = eventRepository.findById(eventId).orElseThrow(() -> new EntityNotFoundException("Event not found"));
+        if (event.getParticipants().contains(appUserRepository.findById(getCurrentUserId()).get())) {
+            throw new EntityExistsException("You are already a participant of this event");
+        }
+        if (event.getParticipants().size() >= event.getMaxGuests()) {
+            throw new IllegalStateException("Event is full");
+        }
+        event.getParticipants().add(appUserRepository.findById(getCurrentUserId()).get());
+        return eventResponseFromEvent(eventRepository.save(event));
+    }
 }
