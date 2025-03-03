@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
 import java.util.Set;
 
 @RestController
@@ -31,7 +32,11 @@ public class AuthController {
         String token = appUserService.authenticateUser(
                 loginRequest.getUsername(),
                 loginRequest.getPassword()
-        );
-        return ResponseEntity.ok(new AuthResponse(token));
+        ).getToken();
+        List<String> roles = appUserService.authenticateUser(
+                loginRequest.getUsername(),
+                loginRequest.getPassword()
+        ).getRoles();
+        return ResponseEntity.ok(new AuthResponse(token, roles));
     }
 }

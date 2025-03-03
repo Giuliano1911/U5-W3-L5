@@ -11,6 +11,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -47,22 +48,23 @@ public class AppUserService {
     }
 
     public AppUser findById(Long id) {
-        return appUserRepository.findById(Long .valueOf(id)).orElseThrow(() -> new EntityNotFoundException("Utente non trovato con id: " + id));
+        return appUserRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Utente non trovato con id: " + id));
     }
 
-    public String authenticateUser(String username, String password) {
+    public AuthResponse authenticateUser(String username, String password) {
         try {
             Authentication authentication = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(username, password)
             );
 
             UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-            return jwtTokenUtil.generateToken(userDetails);
+            String token = jwtTokenUtil.generateToken(userDetails);
+            List<String> roles = jwtTokenUtil.getRolesFromToken(token);
+            return new AuthResponse(token, roles);
         } catch (AuthenticationException e) {
             throw new SecurityException("Credenziali non valide", e);
         }
     }
-
 
     public AppUser loadUserByUsername(String username) {
         AppUser appUser = appUserRepository.findByUsername(username)
